@@ -1,0 +1,49 @@
+# Quick Start:
+#
+# pip install pre-commit
+# pre-commit install && pre-commit install -t pre-push
+# pre-commit run --all-files
+#
+# To Skip Checks:
+#
+# git commit --no-verify
+fail_fast: false
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-case-conflict
+      - id: check-builtin-literals
+      - id: end-of-file-fixer
+      - id: requirements-txt-fixer
+      - id: sort-simple-yaml
+      - id: trailing-whitespace
+      - id: check-yaml
+      - id: mixed-line-ending
+
+  # Black
+  - repo: https://github.com/psf/black
+    rev: 23.1.0
+    hooks:
+      - id: black
+
+  # Ruff
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: "v0.0.259"
+    hooks:
+      - id: ruff
+        args:
+          - --fix
+          - --exit-non-zero-on-fix
+
+  # Pytest
+  - repo: local
+    hooks:
+      - id: tests
+        name: run tests
+        entry: pytest -v
+        language: system
+        types: [ python ]
+        stages: [ push ]
